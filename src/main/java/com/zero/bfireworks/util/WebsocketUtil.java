@@ -3,7 +3,6 @@ package com.zero.bfireworks.util;
 import com.zero.bfireworks.entity.User;
 import com.zero.bfireworks.service.UserService;
 import jakarta.annotation.Resource;
-import jakarta.servlet.ServletRequestEvent;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;

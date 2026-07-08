@@ -29,6 +29,7 @@ public class FireworkWebSocketHandler extends TextWebSocketHandler {
         if (roomId == null || roomId.trim().isEmpty()) {
             roomId="public";
         }
+        roomManager.join(roomId, session);
         User user = (User) session.getAttributes().get("currentUser");
         log.info("用户{}加入房间{},当前人数:{}", user.getUsername(), roomId, roomManager.getSessions(roomId).size());
     }
