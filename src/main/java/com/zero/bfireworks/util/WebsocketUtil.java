@@ -18,6 +18,8 @@ import java.util.Map;
 public class WebsocketUtil implements HandshakeInterceptor {
     @Resource
     private UserService userService;
+    @Resource
+    private RoomManager roomManager;
 
 
     @Override
@@ -37,7 +39,13 @@ public class WebsocketUtil implements HandshakeInterceptor {
             attributes.put("currentUser",user);
 
             String roomId = httpServletRequest.getParameter("roomId");
-            attributes.put("roomId",roomId);
+            if (roomId != null) roomId = roomId.toUpperCase().trim();
+            if (roomId == null || roomId.isEmpty()) roomId = "public";
+            // private房间必须已存在
+            if (!"PUBLIC".equals(roomId) && !roomManager.roomExists(roomId)) {
+                return false;
+            }
+            attributes.put("roomId", roomId);
             return true;
         }
         return false;

@@ -18,6 +18,11 @@ public class RoomManager {
         rooms.computeIfAbsent(roomId,k -> new CopyOnWriteArraySet<>()).add(session);
     }
 
+    //房间是否存在
+    public boolean roomExists(String roomId) {
+        return rooms.containsKey(roomId);
+    }
+
     //用户离开
     public void leave(String roomId, WebSocketSession session) {
         Set<WebSocketSession> room = rooms.get(roomId);
