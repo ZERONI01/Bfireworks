@@ -3,6 +3,8 @@ package com.zero.bfireworks.util;
 import com.zero.bfireworks.entity.User;
 import com.zero.bfireworks.service.UserService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletRequestEvent;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -22,7 +24,9 @@ public class WebsocketUtil implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) {
         if (request instanceof ServletServerHttpRequest){
-            String token = ((ServletServerHttpRequest) request).getServletRequest().getParameter("token");
+            ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
+            HttpServletRequest httpServletRequest = servletRequest.getServletRequest();
+            String token = httpServletRequest.getParameter("token");
 
             if (token ==null || token.isEmpty()){
                 return false;
@@ -32,6 +36,9 @@ public class WebsocketUtil implements HandshakeInterceptor {
                 return false;
             }
             attributes.put("currentUser",user);
+
+            String roomId = httpServletRequest.getParameter("roomId");
+            attributes.put("roomId",roomId);
             return true;
         }
         return false;

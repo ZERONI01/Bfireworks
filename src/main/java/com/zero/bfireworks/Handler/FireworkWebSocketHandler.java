@@ -4,6 +4,8 @@ package com.zero.bfireworks.Handler;
 
 
 import com.zero.bfireworks.entity.User;
+import com.zero.bfireworks.util.RoomManager;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,34 +20,41 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 public class FireworkWebSocketHandler extends TextWebSocketHandler {
     private static final Logger log = LoggerFactory.getLogger(FireworkWebSocketHandler.class);
-    //线程安全的Set，存放所有在线烟花的观众
-    private final CopyOnWriteArraySet<WebSocketSession> sessions = new CopyOnWriteArraySet<>();
-
-    //建立连接后触发
+    @Resource
+    private RoomManager roomManager;
+    //连接后触发
     @Override
-    public void afterConnectionEstablished(WebSocketSession session){
-        sessions.add(session);
-        User user =(User) session.getAttributes().get("currentUser");
-        log.info("用户{}进入烟花模块，当前在线人数:{}", user.getUsername(),sessions.size());
+    public void afterConnectionEstablished(WebSocketSession session) {
+        String roomId = (String) session.getAttributes().get("roomId");
+        if (roomId == null || roomId.trim().isEmpty()) {
+            roomId="public";
+        }
+        User user = (User) session.getAttributes().get("currentUser");
+        log.info("用户{}加入房间{},当前人数:{}", user.getUsername(), roomId, roomManager.getSessions(roomId).size());
     }
     //收到消息后触发
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String payload = message.getPayload();
-        //遍历在线连接，发送坐标
-        for (WebSocketSession webSocketSession : sessions) {
-            if (webSocketSession.isOpen()){
-                //异步发送
-                webSocketSession.sendMessage(message);
+    public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if (roomId == null || roomId.trim().isEmpty()) {
+            roomId="public";
+        }
+        for(WebSocketSession s : roomManager.getSessions(roomId)){
+            if(s.isOpen()){
+                s.sendMessage(message);
             }
         }
     }
-    //断开触发
+    //断开连接后触发
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status){
-        sessions.remove(session);
-        User user =(User) session.getAttributes().get("currentUser");
-        log.info("用户{}离开，当前在线:{}",user != null ? user.getUsername() : "未知用户",sessions.size());
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        String roomId = (String) session.getAttributes().get("roomId");
+        if (roomId == null || roomId.trim().isEmpty()) {
+            roomId="public";
+        }
+        roomManager.leave(roomId, session);
+        User user = (User) session.getAttributes().get("currentUser");
+        log.info("用户{}离开房间{},当前人数:{}", user.getUsername(), roomId, roomManager.getSessions(roomId).size());
     }
 
 
