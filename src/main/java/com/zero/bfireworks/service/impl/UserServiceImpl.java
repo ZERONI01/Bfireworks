@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
         if (vo.getUsername() == null || vo.getUsername().length() < 3 || vo.getUsername().length() > 20) {
             throw new RuntimeException("用户名需3-20位");
         }
-        if (!vo.getUsername().matches("^[a-zA-Z0-9_\\-]+$")) {
-            throw new RuntimeException("用户名只能包含字母、数字、下划线、连字符");
+        if (!vo.getUsername().matches("^[a-zA-Z0-9_\\-\u4e00-\u9fa5]+$")) {
+            throw new RuntimeException("用户名只能包含汉字、字母、数字、下划线、连字符");
         }
         if (vo.getPassword() == null || vo.getPassword().length() < 6 || vo.getPassword().length() > 50) {
             throw new RuntimeException("密码需6-50位");
@@ -90,8 +90,8 @@ public class UserServiceImpl implements UserService {
         if (vo.getUsername() == null || vo.getUsername().length() < 3) {
             throw new RuntimeException("用户名需3-20位");
         }
-        if (!vo.getUsername().matches("^[a-zA-Z0-9_\\-]+$")) {
-            throw new RuntimeException("用户名只能包含字母、数字、下划线、连字符");
+        if (!vo.getUsername().matches("^[a-zA-Z0-9_\\-\u4e00-\u9fa5]+$")) {
+            throw new RuntimeException("用户名只能包含汉字、字母、数字、下划线、连字符");
         }
         if (vo.getPassword() == null || vo.getPassword().length() < 6) {
             throw new RuntimeException("密码需6-50位");
