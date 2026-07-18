@@ -15,7 +15,7 @@ public class JumpServiceImpl implements JumpService {
     @Resource
     private JumpMapper JumpMapper;
     @Override
-    public Jump create(String name, String score, Integer id) {
+    public Jump create(String name, Integer score, Integer id) {
         Jump jump = new Jump();
         jump.setId(Integer.valueOf(id));
         jump.setName(name);
@@ -26,7 +26,7 @@ public class JumpServiceImpl implements JumpService {
     }
 
     @Override
-    public Jump update(Integer id, String name, String score) {
+        public Jump update(Integer id, String name, Integer score) {
         Jump jump = JumpMapper.selectById(id);
         jump.setName(name);
         jump.setScore(score);
