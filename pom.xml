@@ -44,6 +44,13 @@
             <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
+        <!-- H2 (本地轻量开发) -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- BCrypt 加密 -->
         <dependency>
             <groupId>org.springframework.security</groupId>
