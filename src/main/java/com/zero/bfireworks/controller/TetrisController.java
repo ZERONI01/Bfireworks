@@ -1,20 +1,9 @@
 package com.zero.bfireworks.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.zero.bfireworks.service.TetrisService;
-import com.zero.bfireworks.vo.TetrisVO;
 import com.zero.bfireworks.entity.Tetris;
-
-import jakarta.annotation.Resource;
-
-package com.zero.bfireworks.controller;
-
+import com.zero.bfireworks.service.TetrisService;
 import com.zero.bfireworks.util.R;
-import com.zero.bfireworks.vo.JumpVO;
+import com.zero.bfireworks.vo.TetrisVO;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("Tetris")
+@TableName("tetris")
 public class Tetris{
     @TableId(type = IdType.AUTO)
     private Integer id;
